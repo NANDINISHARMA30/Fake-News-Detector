@@ -198,45 +198,13 @@ http://127.0.0.1:5000/
 
 ---
 
-## ✅ Output
+## ✅ Output:
+![Fake News Detection Output](https://github.com/NANDINISHARMA30/Fake-News-Detector/blob/5e1a72ff50bafa118ed7a6e79e385deb564cc9b2/Detector.jpeg)
 
 * Displays **FAKE NEWS ❌** or **REAL NEWS ✅**
 * Supports multiple ML classifiers
 * Clean, responsive interface
 
----
-
-## 📈 Advantages
-
-* Multiple classifier options for flexibility
-* Fast, lightweight, and scalable
-* Real-time predictions
-* Easy deployment
-
----
-
-## ⚠️ Limitations
-
-* Only supports text-based news
-* Model performance depends on dataset quality
-* Cannot detect fake images/videos
-* English-language only
-
----
-
-## 🔮 Future Enhancements
-
-* Integrate deep learning models (LSTM, BERT)
-* Provide prediction confidence scores
-* Add multilingual support
-* Enable URL-based news scraping
-* Deploy on cloud platforms
-
----
-
-## 🧾 Conclusion
-
-This project integrates **ML models (Logistic Regression, Passive-Aggressive Classifier, Naive Bayes)** with **TF-IDF NLP features** and **Flask deployment**, providing an effective and scalable fake news detection system. Future enhancements can make it production-ready for real-world applications.
 
 ---
 
