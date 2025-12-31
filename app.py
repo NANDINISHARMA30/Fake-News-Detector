@@ -1,27 +1,42 @@
-# app.py
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, render_template, request
 import joblib
-import os
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem import SnowballStemmer
+
+# Download stopwords once
+nltk.download("stopwords")
 
 app = Flask(__name__)
 
 # Load model and vectorizer
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-tfidf = joblib.load(os.path.join(BASE_DIR, "tfidf.pkl"))
-model = joblib.load(os.path.join(BASE_DIR, "model.pkl"))
+model = joblib.load("model.pkl")
+tfidf = joblib.load("tfidf.pkl")
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+stemmer = SnowballStemmer("english")
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    data = request.get_json()
-    text = data.get("text", "")
-    features = tfidf.transform([text])
-    prediction = model.predict(features)[0]
-    result = "Fake" if prediction == 1 else "Real"
-    return jsonify({"prediction": result})
+def preprocess(text):
+    text = re.sub("[^a-zA-Z]", " ", text)
+    text = text.lower().split()
+    text = [stemmer.stem(word) for word in text if word not in stopwords.words("english")]
+    return " ".join(text)
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+    prediction = None
+
+    if request.method == "POST":
+        news = request.form["news"]
+
+        if news.strip():
+            processed = preprocess(news)
+            vector = tfidf.transform([processed])
+            result = model.predict(vector)[0]
+
+            prediction = "FAKE NEWS ❌" if result == 1 else "REAL NEWS ✅"
+
+    return render_template("index.html", prediction=prediction)
 
 if __name__ == "__main__":
     app.run(debug=True)
