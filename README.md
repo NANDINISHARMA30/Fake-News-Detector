@@ -247,8 +247,4 @@ This project integrates **ML models (Logistic Regression, Passive-Aggressive Cla
 * [NLTK Documentation](https://www.nltk.org/)
 * [Kaggle Fake News Dataset](https://www.kaggle.com/datasets)
 
----
 
-If you want, I can **also make a comparison table of Logistic Regression vs PAC vs Naive Bayes with accuracy, precision, and recall** for your README—it will look very professional.
-
-Do you want me to do that next?
