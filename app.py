@@ -2,41 +2,51 @@ from flask import Flask, render_template, request
 import joblib
 import re
 import nltk
+import os
 from nltk.corpus import stopwords
 from nltk.stem import SnowballStemmer
 
-# Download stopwords once
+# Download stopwords
 nltk.download("stopwords")
 
-app = Flask(__name__)
+# Flask app with correct paths
+app = Flask(
+    __name__,
+    template_folder="../templates",
+    static_folder="../static"
+)
 
-# Load model and vectorizer
-model = joblib.load("model.pkl")
-tfidf = joblib.load("tfidf.pkl")
+# ---------- PATH HANDLING (Vercel-safe) ----------
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+model = joblib.load(os.path.join(BASE_DIR, "..", "model.pkl"))
+tfidf = joblib.load(os.path.join(BASE_DIR, "..", "tfidf.pkl"))
 
 stemmer = SnowballStemmer("english")
+stop_words = set(stopwords.words("english"))
 
+# ---------- TEXT PREPROCESSING ----------
 def preprocess(text):
     text = re.sub("[^a-zA-Z]", " ", text)
     text = text.lower().split()
-    text = [stemmer.stem(word) for word in text if word not in stopwords.words("english")]
+    text = [stemmer.stem(word) for word in text if word not in stop_words]
     return " ".join(text)
 
+# ---------- ROUTE ----------
 @app.route("/", methods=["GET", "POST"])
 def index():
     prediction = None
 
     if request.method == "POST":
-        news = request.form["news"]
+        news = request.form.get("news")
 
-        if news.strip():
+        if news and news.strip():
             processed = preprocess(news)
             vector = tfidf.transform([processed])
             result = model.predict(vector)[0]
-
             prediction = "FAKE NEWS ❌" if result == 1 else "REAL NEWS ✅"
 
     return render_template("index.html", prediction=prediction)
 
-if __name__ == "__main__":
-    app.run(debug=True)
+# ---------- REQUIRED FOR VERCEL ----------
+app = app

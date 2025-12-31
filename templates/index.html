@@ -9,33 +9,48 @@
 
 <div class="container">
     <h1>📰 Fake News Detector</h1>
-    <p class="subtitle">Machine Learning based News Verification</p>
+    <p class="subtitle">Machine Learning Based News Verification</p>
 
+    <!-- Input Form -->
     <form method="POST">
-        <textarea name="news" placeholder="Paste the news content here..." required></textarea>
+        <textarea 
+            name="news" 
+            placeholder="Paste the news content here..." 
+            required>
+        </textarea>
 
         <select name="model" required>
-            <option value="Passive Aggressive Classifier">Passive Aggressive Classifier</option>
-            <option value="Naive Bayes">Naive Bayes</option>
-            <option value="Logistic Regression">Logistic Regression</option>
+            <option value="Passive Aggressive Classifier">
+                Passive Aggressive Classifier
+            </option>
+            <option value="Naive Bayes">
+                Naive Bayes
+            </option>
+            <option value="Logistic Regression">
+                Logistic Regression
+            </option>
         </select>
 
         <button type="submit">Analyze News</button>
     </form>
 
+    <!-- Output Section -->
     {% if prediction %}
         {% if prediction == "FAKE" %}
             <div class="result fake">
-                ❌ Fake News Detected<br>
-                <small>Model: {{ model_used }}</small>
+                ❌ Fake News Detected
+                <br>
+                <small>Model Used: {{ model_used }}</small>
             </div>
         {% else %}
             <div class="result real">
-                ✅ Real News Detected<br>
-                <small>Model: {{ model_used }}</small>
+                ✅ Real News Detected
+                <br>
+                <small>Model Used: {{ model_used }}</small>
             </div>
         {% endif %}
     {% endif %}
+
 </div>
 
 </body>
